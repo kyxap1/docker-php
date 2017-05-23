@@ -1,9 +1,11 @@
-SHELL=/bin/bash
+SHELL=/bin/bash -e
 
-all: pull build up
+all: validate pull build up
 
 pull:
 	@git pull
+validate:
+	@docker-compose config -q
 build:
 	@docker-compose build
 up:

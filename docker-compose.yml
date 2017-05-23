@@ -13,14 +13,39 @@ services:
       - ./conf/vhosts.conf:/etc/nginx/conf.d/default.conf
 #### PHP APPLICATION
   app:
+    image: ${APP_NAME}:${APP_VERSION}
     build:
       context: ./
       args:
-        pkg: ${APT_PACKAGES}
-        ext: ${PHP_EXTENSIONS}
+        pkg: ${APP_APT_PACKAGES}
+        ext: ${APP_PHP_EXTENSIONS}
+    links:
+      - db
     restart: always
     volumes:
       - ./app:/app
       - ./conf/php.ini:/usr/local/etc/php/php.ini
     environment:
-      - APP_ENV
+      - APP_STAGE
+      - APP_NAME
+      - APP_VERSION
+      - MYSQL_DATABASE=${APP_NAME}
+      - MYSQL_USER=${APP_NAME}
+      - MYSQL_PASSWORD
+#### MYSQL DATABASE
+  db:
+    image: mysql:${MYSQL_VERSION}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=${APP_NAME}
+      - MYSQL_USER=${APP_NAME}
+      - MYSQL_PASSWORD
+
+volumes:
+  db_data:
+
