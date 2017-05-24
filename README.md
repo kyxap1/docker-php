@@ -8,6 +8,6 @@ Deploy PHP app to docker container
 3. Tune `./conf/php.ini` if you need.
 4. Fill `.env` with your settings.
 5. Ensure your application to use hosts `db` and `cache` accordingly for mysql and redis connections.
-6. Have your application configured to use environment variables `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`.
+6. Have your application configured to use same credentials as `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`.
 7. Run ```make``` within `docker-php` root directory to build and run containers.
 8. Read `Makefile` to know your `make` shortcuts.

@@ -31,9 +31,6 @@ services:
       - APP_STAGE
       - APP_NAME
       - APP_VERSION
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
 
 #### MYSQL DATABASE
   db:
