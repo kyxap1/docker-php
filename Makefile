@@ -1,16 +1,20 @@
 SHELL=/bin/bash -e
 
-all: validate pull build up
+.PHONY: pull validate build up logs down purge
+
+all: pull validate build up
 
 pull:
-	@git pull
+	@git pull --ff
 validate:
-	@docker-compose config -q
+	@docker-compose config --quiet
 build:
 	@docker-compose build
 up:
 	@docker-compose up -d --force-recreate
 logs:
-	@docker-compose logs -f
+	@docker-compose logs --follow
 down:
-	@docker-compose down --remove-orphans
+	@docker-compose down
+purge:
+	@docker-compose down --volumes

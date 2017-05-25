@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 #### NGINX GATEWAY
 services:
   web:
@@ -35,11 +35,12 @@ services:
 #### MYSQL DATABASE
   db:
     image: mysql:${MYSQL_VERSION}
-    ports:
-      - "${MYSQL_PORT}:3306"
     restart: always
     volumes:
-      - db_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
+      - ./conf/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - db_data:/data
+    working_dir: /data
     environment:
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE
@@ -49,10 +50,13 @@ services:
 #### REDIS CACHE
   cache:
     image: redis:${REDIS_VERSION}
-    ports:
-      - "${REDIS_PORT}:6379"
     restart: always
+    volumes:
+      - ./conf/redis.conf:/etc/redis.conf
+      - cache_data:/data
+    command: redis-server /etc/redis.conf
 
 volumes:
   db_data:
+  cache_data:
 

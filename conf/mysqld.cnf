@@ -1,0 +1,14 @@
+[client]
+
+[mysql]
+
+[mysqld]
+datadir                 = /data
+pid-file                = /var/run/mysqld/mysqld.pid
+socket                  = /var/run/mysqld/mysqld.sock
+max_allowed_packet      = 128000000
+innodb_file_per_table   = 1
+table_definition_cache  = 8192
+innodb_force_recovery   = 0
+symbolic-links          = 0
+
