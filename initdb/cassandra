@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 set -ueo pipefail
 
-# waiting for available port
-/docker-entrypoint-initdb.d/wait-for-it db:9042 -t 0 -- echo "Cassandra-seed has been started!"
+seed_addr=${seed_addr:-db}
 
-# merge .cql output
-cqlsh db < <( gzip -kdc /docker-entrypoint-initdb.d/*.cql.gz || true;
-                  tee < /docker-entrypoint-initdb.d/*.cql || true;
-)
+# waiting for available port
+/docker-entrypoint-initdb.d/wait-for-it ${seed_addr}:9042 -t 0 -- echo "Cassandra's seed node has been started!"
+
+# provisioning seed with data
+find /docker-entrypoint-initdb.d -type f \
+  \( -name \*.cql -printf "cat %p\n" \) , \
+  \( -name \*.cql.gz -printf "gzip -kdc %p\n" \) \
+  | xargs -I{} bash -c '{}' \
+  | cqlsh ${seed_addr}
 
