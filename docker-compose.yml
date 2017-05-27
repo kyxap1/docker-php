@@ -5,38 +5,51 @@ services:
     extends:
       file: web-engines.yml
       service: ${WEB_ENGINE}
-    restart: always
     links:
       - app
     ports:
-      - "${WEB_PORT}:80"
+      - "${SERVICE_PORT}:80"
 
-#### PHP APPLICATION
+#### APPLICATION
   app:
-    image: ${APP_NAME}:${APP_VERSION}
-    build:
-      context: ./
-      args:
-        pkg: ${APP_APT_PACKAGES}
-        ext: ${APP_PHP_EXTENSIONS}
-    restart: always
+    image: ${APP_NAME}:${APP_VERSION}-${APP_STAGE}
+    extends:
+      file: service-engines.yml
+      service: ${SERVICE_ENGINE}
+    volumes:
+      - ./app:/app
     links:
       - db
       - cache
-    volumes:
-      - ./app:/app
-      - ./conf/php.ini:/usr/local/etc/php/php.ini
     environment:
       - APP_STAGE
       - APP_NAME
       - APP_VERSION
+
+#  app:
+#    image: ${APP_NAME}:${APP_VERSION}
+#    build:
+#      context: ./app
+#      args:
+#        pkg: ${APP_APT_PACKAGES}
+#        ext: ${APP_PHP_EXTENSIONS}
+#    restart: always
+#    links:
+#      - db
+#      - cache
+#    volumes:
+#      - ./app:/app
+#      - ./conf/php.ini:/usr/local/etc/php/php.ini
+#    environment:
+#      - APP_STAGE
+#      - APP_NAME
+#      - APP_VERSION
 
 #### DATABASE
   db:
     extends:
       file: database-engines.yml
       service: ${DATABASE_ENGINE}
-    restart: always
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
       - db_data:/data
@@ -46,9 +59,7 @@ services:
     extends:
       file: cache-engines.yml
       service: ${CACHE_ENGINE}
-    restart: always
     volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
       - cache_data:/data
 
 volumes:
