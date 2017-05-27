@@ -1,0 +1,28 @@
+version: '2.1'
+services:
+#### MYSQL DATABASE
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    restart: always
+    volumes:
+      - ./conf/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+
+#### POSTGRES DATABASE
+  postgres:
+    image: postgres:${POSTGRES_VERSION}
+    restart: always
+    volumes:
+      - ./conf/postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      - PGDATA=/data
+      - POSTGRES_INITDB_ARGS
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+

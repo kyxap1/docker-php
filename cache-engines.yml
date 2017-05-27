@@ -1,0 +1,10 @@
+version: '2.1'
+services:
+#### REDIS
+  redis:
+    image: redis:${REDIS_VERSION}
+    restart: always
+    volumes:
+      - ./conf/redis.conf:/etc/redis.conf
+    command: redis-server /etc/redis.conf
+
