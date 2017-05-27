@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-#### NGINX
+
   nginx:
     image: nginx:${NGINX_VERSION}
     restart: always

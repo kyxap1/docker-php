@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -ueo pipefail
+
+# waiting for available port
+/docker-entrypoint-initdb.d/wait-for-it db:9042 -t 0 -- echo "Cassandra-seed has been started!"
+
+# merge .cql output
+cqlsh db < <( gzip -kdc /docker-entrypoint-initdb.d/*.cql.gz || true;
+                  tee < /docker-entrypoint-initdb.d/*.cql || true;
+)
+

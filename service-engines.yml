@@ -1,13 +1,18 @@
 version: '2.1'
 services:
-#### APPLICATION
+
   php:
-    image: ${APP_NAME}:${APP_VERSION}-${APP_STAGE}
+    image: ${APP_NAME}:${APP_VERSION}
+    restart: always
+    working_dir: /data
     build:
       context: .
       args:
         pkg: ${APP_APT_PACKAGES}
         ext: ${APP_PHP_EXTENSIONS}
+        src: ${APP_SOURCE_DIRECTORY}
+        cmd: >-
+          ${APP_ADDITIONAL_COMMANDS}
     volumes:
       - ./conf/php.ini:/usr/local/etc/php/php.ini
 

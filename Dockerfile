@@ -2,9 +2,12 @@ FROM php:7-fpm
 ENV DEBIAN_FRONTEND noninteractive
 ARG pkg
 ARG ext
-RUN apt-get update -qq && \
-    apt-get install -qq $pkg && \
-    apt-get autoclean -qq
+ARG src
+ARG cmd 
+COPY $src /data
+RUN \
+  apt-get update -qq \
+  && apt-get install -qq $pkg \
+  && apt-get autoclean -qq
 RUN docker-php-ext-install $ext
-RUN curl -sS https://getcomposer.org/installer | \
-      php -- --install-dir=/usr/bin --filename=composer
+RUN echo "$cmd" | xargs -I{} -n1 -P1 bash -c '{}'

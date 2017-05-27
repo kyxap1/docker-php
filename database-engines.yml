@@ -1,10 +1,11 @@
 version: '2.1'
 services:
-#### MYSQL DATABASE
+
   mysql:
     image: mysql:${MYSQL_VERSION}
     restart: always
     volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
       - ./conf/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     environment:
       - MYSQL_ROOT_PASSWORD
@@ -12,11 +13,11 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
 
-#### POSTGRES DATABASE
   postgres:
     image: postgres:${POSTGRES_VERSION}
     restart: always
     volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
       - ./conf/postgresql.conf:/etc/postgresql/postgresql.conf
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     environment:
@@ -25,4 +26,14 @@ services:
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+
+  cassandra:
+    image: cassandra:${CASSANDRA_VERSION}
+    restart: always
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+    environment:
+      - CASSANDRA_CLUSTER_NAME
+      - CASSANDRA_START_RPC
+
 
