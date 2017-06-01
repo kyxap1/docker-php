@@ -19,14 +19,3 @@ volumes:
   app_data: {}
   db_data: {}
   cache_data: {}
-
-networks:
-  app_net:
-    driver: bridge
-    driver_opts:
-      com.docker.network.enable_ipv6: "false"
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.32.0.0/24
-        gateway: 172.32.0.254
