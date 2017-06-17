@@ -6,16 +6,20 @@ services:
     ports: [ "${SERVICE_PORT}:80" ]
 
   app:
-    links: [ db, cache ]
+    links: [ postgres, cassandra, cache ]
     volumes: [ "app_data:/data" ]
 
-  db:
-    volumes: [ "db_data:/data" ]
+  postgres:
+    volumes: [ "postgres_data:/data" ]
+
+  cassandra:
+    volumes: [ "cassandra_data:/data" ]
 
   cache:
     volumes: [ "cache_data:/data" ]
 
 volumes:
   app_data: {}
-  db_data: {}
+  cassandra_data: {}
+  postgres_data: {}
   cache_data: {}
