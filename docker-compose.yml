@@ -39,7 +39,7 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d
       - ./conf/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
-      - db_data:/data
+      - mysql_data:/data
     working_dir: /data
     environment:
       - MYSQL_ROOT_PASSWORD
@@ -53,10 +53,10 @@ services:
     restart: always
     volumes:
       - ./conf/redis.conf:/etc/redis.conf
-      - cache_data:/data
+      - redis_data:/data
     command: redis-server /etc/redis.conf
 
 volumes:
-  db_data:
-  cache_data:
+  mysql_data:
+  redis_data:
 
